@@ -1,5 +1,4 @@
 import routes from "../../routes";
-import { http } from "../../config";
 
 class Router {
     constructor(app) {
@@ -13,10 +12,10 @@ class Router {
             return route.path === url && route.method === method
         }).pop();
 
-        console.log(http.paths.controllers + dispatcher.controller)
-        import(http.paths.controllers + dispatcher.controller).then((module) => {
-            console.log(module)
+        import("../Http/Controllers/" + dispatcher.controller).then((module) => {
+            const controller = new module.default
 
+            return controller[dispatcher.action]()
         }).catch((error) => {
             console.log(error.message)
         })
