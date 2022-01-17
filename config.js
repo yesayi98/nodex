@@ -5,7 +5,7 @@ export const resource = {
 
 export const http = {
     paths: {
-        controllers: '~/src/Http/Controllers/',
-        middlewares: '~/src/Http/Middleware/'
+        controllers: './src/Http/Controllers/',
+        middlewares: './src/Http/Middleware/'
     }
 }

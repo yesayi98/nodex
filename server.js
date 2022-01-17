@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import {resource} from "./config";
 
-const runServer = () => {
+const server = () => {
     console.log('Starting Server...')
     const server = http.createServer((request, response) => {
         try {
@@ -46,4 +46,4 @@ const runServer = () => {
     server.timeout = process.env.TIMEOUT ?? 10000
 }
 
-export default runServer
+export default server

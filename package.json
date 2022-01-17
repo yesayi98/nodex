@@ -1,17 +1,31 @@
 {
-  "name": "helloworld",
+  "name": "nodex",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "/public/index.js",
   "type": "module",
+  "private": true,
   "scripts": {
+    "build": "babel public/index.js -d dist",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --experimental-specifier-resolution=node public/index.js\n"
+    "start": "nodemon --exec babel-node --require dotenv/config --experimental-modules --es-module-specifier-resolution=node --presets es6 public/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Yesayi Babakhanyan",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^10.0.0"
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.7"
+  },
+  "devDependencies": {
+    "@babel/node": "^7.16.8",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.16.8",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.16.8",
+    "@babel/runtime": "^7.16.7",
+    "babel-plugin-root-import": "^6.6.0",
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.15"
   }
 }
