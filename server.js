@@ -1,49 +1,36 @@
 import http from 'http';
-import App from './src/Core/App';
-import fs from 'fs';
-import path from 'path';
-import {resource} from "./config";
+import app from './src/Core/App';
 
 const server = () => {
-    console.log('Starting Server...')
-    const server = http.createServer((request, response) => {
-        try {
-            if ((resource.resourceFiles).test(request.url)) {
-                const filePath = path.join(resource.resourcePath, request.url)
+  console.log('Starting Server...');
+  const server = http.createServer((request, response) => {
 
-                fs.stat(filePath, (err, stats) => {
-                    if (err) {
-                        console.error(err)
-                        return
-                    }
-
-                    response.writeHead(200, {
-                        'Content-Type': stats.type,
-                        'Content-Length': stats.size
-                    });
-                    const readStream = fs.createReadStream(filePath);
-
-                    readStream.pipe(response);
-                })
-            } else {
-                const app = App.getInstance();
-
-                response.write(app.start(request) ?? 'nothing to show')
-            }
-        } catch (e) {
-            console.log(e.message)
-            response.write(e)
+    app.start(request, response).then((result) => {
+      response.write(result?.toString() ?? '');
+      response.end();
+    }).catch((e) => {
+      if (typeof e === 'object') {
+        if (e.message) {
+          console.log('\nMessage: ' + e.message);
         }
+        if (e.stack) {
+          console.log('\nStacktrace:');
+          console.log('='.repeat(40));
+          console.log(e.stack);
+        }
+      }
+      response.statusCode = 400;
+      response.end(e.message);
+    });
 
-        response.end();
-    })
-    const port = process.env.PORT ?? 8080;
+  });
+  const port = process.env.PORT ?? 8080;
 
-    server.listen(port, () => {
-        console.log(`Server running at port ${port}`)
-    })
+  server.listen(port, () => {
+    console.log(`Server running at port ${port}`);
+  });
 
-    server.timeout = process.env.TIMEOUT ?? 10000
-}
+  server.timeout = process.env.TIMEOUT ?? 10000;
+};
 
-export default server
+export default server;

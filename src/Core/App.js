@@ -1,31 +1,37 @@
-import Container from "./Container";
-import Router from "./Router";
-import {ClientRequest} from "http";
+import Container from './Container';
+import Router from './Router';
+import DB from './DB.js';
+import {db} from '../../config.js';
+import ValidatorFactory from './Validators/Factories/ValidatorFactory.js';
 
 class App {
-    constructor() {
-        this.container = Container.getInstance();
+  static instance;
+
+  constructor() {
+    this.container = Container.getInstance();
+  }
+
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new App;
     }
 
-    static getInstance() {
-        if (!this.instance) {
-            this.instance = new App;
-        }
+    return this.instance;
+  }
 
-        return this.instance
-    }
+  prepare(request, response) {
+    this.container.set('router', new Router(this));
+    this.container.set('request', request);
+    this.container.set('response', response);
+    this.container.set('connection', new DB(db).syncDB());
+    this.container.set('validatorFactory', ValidatorFactory.getInstance(this));
+  }
 
-    prepare(request) {
-        this.container.set('router', new Router(this))
-        this.container.set('request', request)
-        // this.container.set('connection', new Connection())
-    }
+  start(request, response) {
+    this.prepare(request, response);
 
-    start(request) {
-        this.prepare(request)
-
-        return this.container.get('router').dispatch(request);
-    }
+    return this.container.get('router').dispatch(request);
+  }
 }
 
-export default App
+export default App.getInstance();

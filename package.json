@@ -15,7 +15,12 @@
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.16.8",
-    "@babel/core": "^7.16.7"
+    "@babel/core": "^7.16.7",
+    "bcrypt": "^5.0.1",
+    "mariadb": "^2.5.5",
+    "mime-types": "^2.1.34",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.14.1"
   },
   "devDependencies": {
     "@babel/node": "^7.16.8",

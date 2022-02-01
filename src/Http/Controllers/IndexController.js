@@ -1,9 +1,8 @@
-export default class indexController {
-    constructor() {
-        console.log('constructed')
-    }
+import Controller from './Controller';
 
-    index() {
-        console.log(123)
+export default class IndexController extends Controller{
+    index(request) {
+        const response = this.response();
+        response.write('shun')
     }
 }
