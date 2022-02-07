@@ -6,5 +6,5 @@ export default function LengthValidator(name, value, param) {
     throw new Error(`${name} length should be less than ${param}`);
   }
 
-  return value;
+  return new Promise(resolve => resolve(value));
 }

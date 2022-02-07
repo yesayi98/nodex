@@ -3,6 +3,7 @@ import Router from './Router';
 import DB from './DB.js';
 import {db} from '../../config.js';
 import ValidatorFactory from './Validators/Factories/ValidatorFactory.js';
+import ResponseToJsonMiddleware from '../Http/Middleware/ResponseToJsonMiddleware.js';
 
 class App {
   static instance;
@@ -25,6 +26,9 @@ class App {
     this.container.set('response', response);
     this.container.set('connection', new DB(db).syncDB());
     this.container.set('validatorFactory', ValidatorFactory.getInstance(this));
+    this.container.set('defaultMiddlewares', [
+      ResponseToJsonMiddleware
+    ])
   }
 
   start(request, response) {

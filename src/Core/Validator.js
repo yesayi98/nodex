@@ -1,7 +1,7 @@
 export default function Validator(request, rules) {
-  const validated = {};
+  const validated = {}
   const validatorFactory = this.container.get('validatorFactory');
-  const errors = [];
+  const promises = [];
 
   Object.entries(rules).map(([param, requirements]) => {
     requirements.map((requirement) => {
@@ -14,17 +14,17 @@ export default function Validator(request, rules) {
       }
       const validator = validatorFactory.getValidator(requirement)
 
-      try {
-        validated[param] = validator(param, request.params[param] ?? request.query[param], validatorParam)
-      } catch (e) {
-        errors.push(e.message)
-      }
+      promises.push(validator(param, request.params[param] ?? request.query[param], validatorParam));
     })
   })
 
-  if (errors.length) {
-    throw new Error(JSON.stringify({message: errors.join('. ')}))
-  }
+  return Promise.all(promises).then((validatedParams) => {
+    validatedParams = validatedParams.filter((v, i, a) => a.indexOf(v) === i)
 
-  return validated;
+    Object.entries(rules).map(([param], index) => (validated[param] = validatedParams[index]))
+
+    return validated
+  }).catch((reason) => {
+    throw new Error(reason)
+  })
 }

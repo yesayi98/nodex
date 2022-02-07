@@ -4,6 +4,7 @@ import LengthValidator from '../LengthValidator.js';
 import RequireValidator from '../RequireValidator.js';
 import PrimitiveTypeValidator from '../PrimitiveTypeValidator.js';
 import UniqueValidator from '../UniqueValidator.js';
+import ExistsValidator from '../ExistsValidator.js';
 
 export default class ValidatorFactory {
   #validators;
@@ -31,6 +32,9 @@ export default class ValidatorFactory {
     this.use('required', RequireValidator);
     this.use('contains', ContainsValidator);
     this.use('unique', UniqueValidator.bind({
+      connection: this.app.container.get('connection')
+    }));
+    this.use('exists', ExistsValidator.bind({
       connection: this.app.container.get('connection')
     }));
   }

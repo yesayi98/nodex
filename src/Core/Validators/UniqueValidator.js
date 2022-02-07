@@ -1,8 +1,9 @@
 import {QueryTypes} from 'sequelize';
 
-export default function UniqueValidator(name, value, param) {
-  this.connection.then(async ({connection}) => {
-    const [{count}] = await connection.query(
+export default async function UniqueValidator(name, value, param) {
+  const {connection} = await this.connection;
+
+  const [{count}] = await connection.query(
       `SELECT COUNT(${name}) AS count  
        FROM ${param}
        WHERE ${name} = :${name}`,
@@ -12,12 +13,9 @@ export default function UniqueValidator(name, value, param) {
       }
     );
 
-    if (count > 0) {
-      throw new Error(`${name} should be unique`);
-    }
-  }).catch((reason) => {
-    throw new Error(reason.message);
-  });
+  if (count > 0) {
+    throw new Error(`${name} should be unique`);
+  }
 
   return value;
 }

@@ -1,6 +1,7 @@
 import {DataTypes, Model} from 'sequelize';
 import bcrypt from 'bcrypt';
-export class User extends Model { }
+
+export class User extends Model {}
 
 const user = {
   model: User,
@@ -32,14 +33,14 @@ const user = {
           user.password = bcrypt.hashSync(user.password, salt);
         }
       },
-      beforeUpdate:async (user) => {
+      beforeUpdate: async (user) => {
         if (user.password) {
           const salt = await bcrypt.genSaltSync(10, 'a');
           user.password = bcrypt.hashSync(user.password, salt);
         }
       }
-    },
+    }
   }
-}
+};
 
-export default user
+export default user;

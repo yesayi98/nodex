@@ -55,15 +55,25 @@ class Router {
                     request.params = data && JSON.parse(data)
 
                     if (dispatcher.validator){
-                        request.validated = Validator.apply(this.app, [request, dispatcher.validator()])
+                        request.validated = await Validator.apply(this.app, [request, dispatcher.validator()])
                     }
+
+                    const dispatchSteps = this.app.container.get('defaultMiddlewares')
 
                     if(dispatcher.middleware) {
-                        resolve(dispatcher.middleware(request, response, (request) => controller[dispatcher.action](request)))
-                        return
+                        dispatchSteps.push(dispatcher.middleware)
                     }
 
-                    resolve(controller[dispatcher.action](request));
+                    dispatchSteps.push(controller[dispatcher.action])
+
+                    const dispatchAll = (request) => {
+                      const step = dispatchSteps.shift()
+                      return step(request, dispatchAll)
+                    }
+
+                    let response = dispatchAll(request)
+
+                    resolve(response);
                 }catch (e) {
                     reject(e)
                 }

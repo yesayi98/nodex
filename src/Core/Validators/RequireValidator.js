@@ -7,5 +7,5 @@ export default function RequireValidator(name, value) {
     throw new Error(`${name} is required`);
   }
 
-  return value
+  return new Promise(resolve => resolve(value));
 }

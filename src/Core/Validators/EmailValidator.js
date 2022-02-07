@@ -9,5 +9,5 @@ export default function EmailValidator(name, value) {
     throw new Error(`${name} is not valid email`);
   }
 
-  return value;
+  return new Promise(resolve => resolve(value));
 }

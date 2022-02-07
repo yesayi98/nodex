@@ -3,5 +3,5 @@ export default function PrimitiveTypeValidator(name, value) {
     throw new Error(`${name} should be in "${this.type}" type`);
   }
 
-  return value
+  return new Promise(resolve => resolve(value));
 }

@@ -1,5 +1,5 @@
-const AuthMiddleware = (request, response, next) => {
-  return next(request);
+const AuthMiddleware = async (request, next) => {
+  return await next(request);
 }
 
 export default AuthMiddleware

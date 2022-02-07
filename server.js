@@ -1,10 +1,11 @@
 import http from 'http';
 import app from './src/Core/App';
+import dotenv from 'dotenv'
 
 const server = () => {
+  dotenv.config()
   console.log('Starting Server...');
   const server = http.createServer((request, response) => {
-
     app.start(request, response).then((result) => {
       response.write(result?.toString() ?? '');
       response.end();
